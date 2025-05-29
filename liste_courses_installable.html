@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Liste de Courses Familiale</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <meta name="theme-color" content="#4CAF50">
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    h2 { background-color: #f0f0f0; padding: 5px; }
+    .category { margin-bottom: 20px; }
+    .item { margin-left: 20px; }
+    input[type="text"] { margin-top: 10px; width: 80%; }
+    button { margin-top: 10px; }
+    .container { column-count: 2; }
+  </style>
+</head>
+<body>
+  <h1>🛒 Liste de Courses Partageable</h1>
+
+  <div id="list" class="container"></div>
+
+  <h2>➕ Ajouter un produit personnalisé</h2>
+  <input type="text" id="newItem" placeholder="Nom du produit">
+  <select id="categorySelect"></select>
+  <button onclick="addCustomItem()">Ajouter</button>
+
+  <script>
+    const data = {
+      "🥦 Fruits et Légumes": ["Pommes", "Bananes", "Oranges", "Citrons", "Tomates", "Concombres", "Carottes", "Pommes de terre", "Salade verte", "Oignons", "Ail", "Avocats", "Courgettes", "Poivrons", "Persil / Coriandre / Menthe"],
+      "🍝 Épicerie": ["Pâtes / Riz", "Lentilles / Haricots", "Farine", "Sucre", "Sel / Poivre", "Sauce tomate", "Huile", "Vinaigre", "Conserves"],
+      "🧀 Produits laitiers": ["Lait", "Œufs", "Beurre (demi-sel / doux)", "Crème fraîche", "Yaourts", "Fromage râpé", "Camembert / Emmental"],
+      "🍪 Goûter & Petit-déjeuner": ["Biscuits", "Barres de céréales", "Brioche / Pain de mie", "Crêpes WW", "Jus de fruits", "Café / Thé"],
+      "🧼 Produits ménagers": ["Liquide vaisselle", "Essuie-tout", "Papier toilettes", "Lessive", "Sacs-poubelle", "Sacs congélation", "Film / Papier alu"],
+      "🧴 Soins & Salle de Bain": ["Gel douche / Shampooing", "Dentifrice / Brosse à dents", "Déodorant", "Savon", "Rasoirs", "Crème hydratante"],
+      "🍗 Frais / Traiteur": ["Blanc de poulet", "Steak haché", "Poisson", "Côtes"],
+      "🧊 Surgelés": ["Légumes surgelés", "Frites / Pommes dauphines", "Glaces", "Pizzas surgelées", "Poisson pané"],
+      "⏱️ Oublis de dernière minute": []
+    };
+
+    const listDiv = document.getElementById("list");
+    const categorySelect = document.getElementById("categorySelect");
+
+    function renderList() {
+      listDiv.innerHTML = "";
+      categorySelect.innerHTML = "";
+      for (const cat in data) {
+        const section = document.createElement("div");
+        section.className = "category";
+
+        const h2 = document.createElement("h2");
+        h2.textContent = cat;
+        section.appendChild(h2);
+
+        data[cat].forEach(item => {
+          const label = document.createElement("label");
+          label.className = "item";
+          const checkbox = document.createElement("input");
+          checkbox.type = "checkbox";
+          checkbox.name = item;
+          label.appendChild(checkbox);
+          label.appendChild(document.createTextNode(" " + item));
+          section.appendChild(label);
+          section.appendChild(document.createElement("br"));
+        });
+
+        listDiv.appendChild(section);
+
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        categorySelect.appendChild(opt);
+      }
+    }
+
+    function addCustomItem() {
+      const newItem = document.getElementById("newItem").value.trim();
+      const category = categorySelect.value;
+      if (newItem && category) {
+        data[category].push(newItem);
+        document.getElementById("newItem").value = "";
+        renderList();
+      }
+    }
+
+    renderList();
+  </script>
+</body>
+</html>
